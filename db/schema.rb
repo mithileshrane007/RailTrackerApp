@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119055829) do
+ActiveRecord::Schema.define(version: 20170119115750) do
 
   create_table "assigned_to_froms", force: :cascade do |t|
     t.integer  "assigned_by",     limit: 4, null: false
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170119055829) do
     t.string   "dateofbirth",  limit: 255,                 null: false
     t.string   "phone",        limit: 255,                 null: false
     t.string   "track_id_reg", limit: 255,                 null: false
+    t.string   "email_id",     limit: 255,                 null: false
   end
 
 end

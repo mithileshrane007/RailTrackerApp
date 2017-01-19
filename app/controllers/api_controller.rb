@@ -52,29 +52,29 @@ class ApiController < ApplicationController
     def get_user_list_of_company
     	company_uid = params[:company_uid]
 	
-		puts created_at
 
 		data={}
 		if company_uid.present?
 			
 
-			company=Company.where(company_uid: company_uid)
+			company=User.where(company_id: company_uid)
 
-			if company.errors.full_messages.to_sentence =="" #logs.blank?
+			puts "Insput value::::::::::::"+company.inspect
+			if not company.blank? #logs.blank?
 				data['error'] = '0'
 				data['msg'] = 'Sucessful'
-
-				puts "created object::"+company.company_uid
 				data['user_list']=company
 			else
 
-				data['error'] = '1002'
-				data['msg'] = 'unsucessful'
+				data['error'] = '0'
+				data['msg'] = 'Sucessful'
+				data['user_list']=company
+
 				
 	    	end
 		else
 				data['error'] = '1002'
-				data['msg'] = 'unsucessful.Something went wrong.'
+				data['msg'] = 'Unsucessful.No company exists.'
 		end
 
 		respond_to do |format|
@@ -134,6 +134,7 @@ class ApiController < ApplicationController
 		user_type = params[:user_type]	
 		address = params[:address]
 		phone=params[:phone]
+		email_id=params[:email_id]
 		dateofbirth=params[:dateofbirth]
 		description= params[:description]
 		track_id_reg=params[:track_id_reg]
@@ -142,31 +143,40 @@ class ApiController < ApplicationController
 		puts created_at
 
 		data={}
+		
+		if not User.check_for_duplicates(track_id_reg) || User.check_for_duplicates_for_phone_email(phone,email_id) 
+			
+			if name.present? && user_type.present? && address.present? && phone.present? && dateofbirth.present? && description.present? && track_id_reg.present? && company_id.present? && email_id.present? 
+				user=User.create(name: name,user_type: user_type,address: address,created_at: created_at,phone: phone,dateofbirth: dateofbirth,description: description,track_id_reg: track_id_reg,company_id: company_id,email_id: email_id)
+				puts "ghhhh"+user.errors.inspect
+				flash[:notice] = user.errors.full_messages.to_sentence
+				puts "sfdfdf"+user.errors.full_messages.to_sentence
+				if user.errors.full_messages.to_sentence =="" 
+					data['error'] = '0'
+					data['msg'] = 'Entry suceessful'
+				else
 
-		if name.present? && user_type.present? && address.present? && phone.present? && dateofbirth.present? && description.present? && track_id_reg.present? && company_id.present?
-			user=User.create(name: name,user_type: user_type,address: address,created_at: created_at,phone: phone,dateofbirth: dateofbirth,description: description,track_id_reg: track_id_reg,company_id: company_id)
-			puts "ghhhh"+user.errors.inspect
-			flash[:notice] = user.errors.full_messages.to_sentence
-			puts "sfdfdf"+user.errors.full_messages.to_sentence
-			if user.errors.full_messages.to_sentence =="" 
-				data['error'] = '0'
-				data['msg'] = 'Entry suceessful'
+					data['error'] = '1002'
+					data['msg'] = 'Entry unsuceessful'
+					
+		    	end
 			else
-
-				data['error'] = '1002'
-				data['msg'] = 'Entry unsuceessful'
-				
-	    	end
+					data['error'] = '1002'
+					data['msg'] = 'Entry unsuceessful.Something went wrong.'
+			end
 		else
-				data['error'] = '1002'
-				data['msg'] = 'Entry unsuceessful.Something went wrong.'
+			data['error'] = '1003'
+			data['phone_email']=User.check_for_duplicates_for_phone_email(phone,email_id)
+			data['track_id_reg']=User.check_for_duplicates(track_id_reg)
+			data['msg'] = 'Entry unsuceessful.Duplicate Entry or Something went wrong.'
+
 		end
     	respond_to do |format|
 	      			format.json { render json: data }
 	    			end
     end
 
-    def login
+    def login_company
     	company_id = params[:company_id]
     	password= params[:password]
 
@@ -184,8 +194,8 @@ class ApiController < ApplicationController
     		end
 
     	else
-			data['error'] = '1002'
-			data['msg'] = 'Something went wrong.'	
+			data['error'] = '1003'
+			data['msg'] = 'Something went wrong.Invalid Data'	
     	end
     	respond_to do |format|
 	      			format.json { render json: data }

@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   post 'get_details_of_user' => 'api#get_details_of_user'
   post 'add_user' => 'api#add_user'
   post 'add_company' => 'api#add_company'
-  post 'login' => 'api#login'
+  post 'login_company' => 'api#login_company'
   post 'get_user_list_of_company' => 'api#get_user_list_of_company'
 
 end
