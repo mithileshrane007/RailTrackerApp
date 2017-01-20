@@ -60,6 +60,9 @@ class ApiController < ApplicationController
 			company=User.where(company_id: company_uid)
 
 			puts "Insput value::::::::::::"+company.inspect
+			for i in company
+				puts i.id ,i.user_type
+			end
 			if not company.blank? #logs.blank?
 				data['error'] = '0'
 				data['msg'] = 'Sucessful'

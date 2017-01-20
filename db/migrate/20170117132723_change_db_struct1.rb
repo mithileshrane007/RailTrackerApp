@@ -6,3 +6,4 @@ class ChangeDbStruct1 < ActiveRecord::Migration
 	 add_column :users, :phone,:string,:null => false
   end
 end
+

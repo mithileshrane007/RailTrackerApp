@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119115750) do
+ActiveRecord::Schema.define(version: 20170120095609) do
 
   create_table "assigned_to_froms", force: :cascade do |t|
     t.integer  "assigned_by",     limit: 4, null: false
@@ -39,16 +39,16 @@ ActiveRecord::Schema.define(version: 20170119115750) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",         limit: 32,                  null: false
-    t.string   "user_type",    limit: 255,   default: "0"
+    t.string   "name",         limit: 32,                         null: false
     t.text     "description",  limit: 65535
-    t.datetime "created_at",                               null: false
+    t.datetime "created_at",                                      null: false
     t.integer  "company_id",   limit: 4
-    t.string   "address",      limit: 255,                 null: false
-    t.string   "dateofbirth",  limit: 255,                 null: false
-    t.string   "phone",        limit: 255,                 null: false
-    t.string   "track_id_reg", limit: 255,                 null: false
-    t.string   "email_id",     limit: 255,                 null: false
+    t.string   "address",      limit: 255,                        null: false
+    t.string   "dateofbirth",  limit: 255,                        null: false
+    t.string   "phone",        limit: 255,                        null: false
+    t.string   "track_id_reg", limit: 255,                        null: false
+    t.string   "email_id",     limit: 255,                        null: false
+    t.string   "user_type",    limit: 8,     default: "employee"
   end
 
 end
